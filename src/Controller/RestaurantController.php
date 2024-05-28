@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use OpenApi\Attributes as OA;
 
 #[Route('api/restaurant', name: 'app_api_restaurant_')]
 class RestaurantController extends AbstractController

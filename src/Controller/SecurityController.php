@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
+use OA\property;
+use OA\RequestBody;
 use App\Entity\User;
+use OpenApi\Attributes as OA;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +24,82 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/register', name: 'register', methods: ['POST'])]
+    //Ajouter attributs OpenApi Swagger
+    #[OA\Tag(name: "Inscription")]
+    #[OA\Post(
+        path: "/api/register",
+        summary: "Inscription d\'un nouvel utilisateur",
+        requestBody: new OA\RequestBody(
+            required: true,
+            description: "Les données de l'utilisateur à inscrire",
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(
+                        property: "firstName",
+                        type: "string",
+                        example: "firstName"
+                    ),
+                    new OA\Property(
+                        property: "lastName",
+                        type: "string",
+                        example: "lastName"
+                    ),
+                    new OA\Property(
+                        property: "email",
+                        type: "string",
+                        example: "adresse@mail.Com"
+                    ),
+                    new OA\Property(
+                        property: "password",
+                        type: "string",
+                        example: "Mot de passe"
+                    ),
+                    new OA\Property(
+                        property: "roles",
+                        type: "array",
+                        items: (new OA\Items(
+                            type: "string",
+                            example: "ROLE_USER"
+                        ))
+                    ),
+                    new OA\Property(
+                        property: "guestNumber",
+                        type: "integer",
+                        example: 1
+                    ),
+                ]
+            )
+        ),
+        responses: [new OA\Response(
+            response: "201",
+            description: "Utilisateur inscrit avec succès",
+            content: new OA\JsonContent(
+                type: "object",
+                properties: [
+                    new OA\Property(
+                        property: "user",
+                        type: "string",
+                        example: "adresse@mail.Com"
+                    ),
+                    new OA\Property(
+                        property: "apiToken",
+                        type: "string",
+                        example: "cs<ce5ce15ce1q1e5c1e5cec5e6ce26ce6ce2ce6c2e6c2ec65e5c1ec51ec"
+                    ),
+                    new OA\Property(
+                        property: "roles",
+                        type: "array",
+                        items: (new OA\Items(
+                            type: "string",
+                            example: "ROLE_USER"
+                        ))
+                    ),
+                ]
+            )
+        )]
+
+    )]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $user = $this->serializer->deserialize($request->getContent(), User::class, 'json');

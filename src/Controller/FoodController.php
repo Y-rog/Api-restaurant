@@ -85,7 +85,7 @@ class FoodController extends AbstractController
         )],
         responses: [new OA\Response(
             response: "200",
-            description: "Plat affiché avec succès",
+            description: "Plat trouvé avec succès",
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
@@ -141,17 +141,6 @@ class FoodController extends AbstractController
             new OA\Response(
                 response: "204",
                 description: "Plat modifié avec succès",
-                content: new OA\JsonContent(
-                    type: "object",
-                    properties: [
-                        new OA\Property(property: "id", type: "integer", example: 1),
-                        new OA\Property(property: "title", type: "string", example: "Nom du plat"),
-                        new OA\Property(property: "description", type: "string", example: "Description du plat"),
-                        new OA\Property(property: "price", type: "integer", example: 10),
-                        new OA\Property(property: "createdAt", type: "string", format: "date-time"),
-                        new OA\Property(property: "updatedAt", type: "string", format: "date-time"),
-                    ]
-                )
             ),
             new OA\Response(
                 response: "404",

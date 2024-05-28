@@ -144,6 +144,7 @@ class RestaurantController extends AbstractController
                     new OA\Property(property: "amOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "08:00"))),
                     new OA\Property(property: "pmOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "12:00"))),
                     new OA\Property(property: "maxGuest", type: "integer", example: 50),
+                    new OA\Property(property: "createdAt", type: "string", format: "date-time"),
                     new OA\Property(property: "updateddAt", type: "string", format: "date-time")
                 ]
             )
@@ -151,7 +152,20 @@ class RestaurantController extends AbstractController
         responses: [
             new OA\Response(
                 response: "204",
-                description: "Restaurant modifié avec succès"
+                description: "Restaurant modifié avec succès",
+                content: new OA\JsonContent(
+                    type: "object",
+                    properties: [
+                        new OA\Property(property: "id", type: "integer", example: 3),
+                        new OA\Property(property: "name", type: "string", example: "Nom du restaurant"),
+                        new OA\Property(property: "description", type: "string", example: "Description du restaurant"),
+                        new OA\Property(property: "amOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "08:00"))),
+                        new OA\Property(property: "pmOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "12:00"))),
+                        new OA\Property(property: "maxGuest", type: "integer", example: 50),
+                        new OA\Property(property: "createdAt", type: "string", format: "date-time"),
+                        new OA\Property(property: "updateddAt", type: "string", format: "date-time")
+                    ]
+                )
             ),
             new OA\Response(
                 response: "404",

@@ -27,7 +27,7 @@ class Picture
 
     #[ORM\ManyToOne(inversedBy: 'pictures')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?restaurant $restaurant = null;
+    private ?Restaurant $restaurant = null;
 
     public function getId(): ?int
     {

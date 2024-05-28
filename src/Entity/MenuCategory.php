@@ -15,11 +15,11 @@ class MenuCategory
 
     #[ORM\ManyToOne(inversedBy: 'menuCategories')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?menu $menuId = null;
+    private ?Menu $menuId = null;
 
     #[ORM\ManyToOne(inversedBy: 'menuCategories')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?category $categoryId = null;
+    private ?Category $categoryId = null;
 
     public function getId(): ?int
     {

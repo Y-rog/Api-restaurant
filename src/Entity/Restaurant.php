@@ -23,7 +23,7 @@ class Restaurant
     private ?string $description = null;
 
     #[ORM\Column]
-    private array $amOpeninTime = [];
+    private array $amOpeningTime = [];
 
     #[ORM\Column]
     private array $pmOpeningTime = [];
@@ -94,14 +94,14 @@ class Restaurant
         return $this;
     }
 
-    public function getAmOpeninTime(): array
+    public function getAmOpeningTime(): array
     {
-        return $this->amOpeninTime;
+        return $this->amOpeningTime;
     }
 
-    public function setAmOpeninTime(array $amOpeninTime): static
+    public function setAmOpeningTime(array $amOpeningTime): static
     {
-        $this->amOpeninTime = $amOpeninTime;
+        $this->amOpeningTime = $amOpeningTime;
 
         return $this;
     }

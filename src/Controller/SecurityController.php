@@ -86,7 +86,7 @@ class SecurityController extends AbstractController
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
-                    new OA\Property(property: "username", type: "string", example: "adresse@mail.Com"),
+                    new OA\Property(property: "username", type: "string", example: "adresse@mail.com"),
                     new OA\Property(property: "password", type: "string", example: "Mot de passe"),
                 ]
             )
@@ -97,7 +97,7 @@ class SecurityController extends AbstractController
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
-                    new OA\Property(property: "user", type: "string", example: "adresse@mail.Com"),
+                    new OA\Property(property: "user", type: "string", example: "adresse@mail.com"),
                     new OA\Property(property: "apiToken", type: "string", example: "cs<ce5ce15ce1q1e5c1e5cec5e6ce26ce6ce2ce6c2e6c2ec65e5c1ec51ec"),
                     new OA\Property(property: "roles", type: "array", items: (new OA\Items(type: "string",        example: "ROLE_USER"))),
                 ]

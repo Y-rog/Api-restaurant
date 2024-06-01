@@ -39,6 +39,8 @@ class RestaurantController extends AbstractController
                     new OA\Property(property: "amOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "08:00"))),
                     new OA\Property(property: "pmOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "12:00"))),
                     new OA\Property(property: "maxGuest", type: "integer", example: 50),
+                    new OA\Property(property: "createdAt", type: "string", format: "date-time"),
+                    new OA\Property(property: "owner", type: "integer", example: 1)
                 ]
             )
         ),
@@ -55,6 +57,7 @@ class RestaurantController extends AbstractController
                     new OA\Property(property: "pmOpeningTime", type: "array", items: (new OA\Items(type: "string", example: "12:00"))),
                     new OA\Property(property: "maxGuest", type: "integer", example: 50),
                     new OA\Property(property: "createdAt", type: "string", format: "date-time"),
+                    new OA\Property(property: "owner", type: "integer", example: 1)
                 ]
             )
         )]
@@ -63,6 +66,7 @@ class RestaurantController extends AbstractController
     {
         $restaurant = $this->serializer->deserialize($request->getContent(), Restaurant::class, 'json');
         $restaurant->setCreatedAt(new DateTimeImmutable());
+        $restaurant->setOwner($this->getUser());
 
         $this->manager->persist($restaurant);
         $this->manager->flush();

@@ -49,9 +49,15 @@ class Restaurant
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'restaurant', orphanRemoval: true)]
     private Collection $bookings;
 
+    /**
+     * @var Collection<int, Booking>
+     */
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'restaurant', orphanRemoval: true)]
     private Collection $menus;
 
+    /**
+     * @var User
+     */
     #[ORM\OneToOne(inversedBy: 'restaurant', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $owner = null;

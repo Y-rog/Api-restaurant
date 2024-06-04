@@ -22,7 +22,7 @@ class Menu
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(type: Types::FLOAT)]
     private ?int $price = null;
 
     #[ORM\Column]
@@ -75,7 +75,7 @@ class Menu
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
@@ -135,7 +135,7 @@ class Menu
     {
         if (!$this->menuCategories->contains($menuCategory)) {
             $this->menuCategories->add($menuCategory);
-            $menuCategory->setMenuId($this);
+            $menuCategory->setMenu($this);
         }
 
         return $this;
@@ -145,8 +145,8 @@ class Menu
     {
         if ($this->menuCategories->removeElement($menuCategory)) {
             // set the owning side to null (unless already changed)
-            if ($menuCategory->getMenuId() === $this) {
-                $menuCategory->setMenuId(null);
+            if ($menuCategory->getMenu() === $this) {
+                $menuCategory->setMenu(null);
             }
         }
 

@@ -13,39 +13,39 @@ class MenuCategory
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'menuCategories')]
+    #[ORM\ManyToOne(inversedBy: 'menuCategories', targetEntity: Menu::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Menu $menuId = null;
+    private ?Menu $menu = null;
 
-    #[ORM\ManyToOne(inversedBy: 'menuCategories')]
+    #[ORM\ManyToOne(inversedBy: 'menuCategories', targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $categoryId = null;
+    private ?Category $category = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getMenuId(): ?menu
+    public function getMenu(): ?menu
     {
-        return $this->menuId;
+        return $this->menu;
     }
 
-    public function setMenuId(?menu $menuId): static
+    public function setMenu(?menu $menu): static
     {
-        $this->menuId = $menuId;
+        $this->menu = $menu;
 
         return $this;
     }
 
-    public function getCategoryId(): ?category
+    public function getCategory(): ?category
     {
-        return $this->categoryId;
+        return $this->category;
     }
 
-    public function setCategoryId(?category $categoryId): static
+    public function setCategory(?category $category): static
     {
-        $this->categoryId = $categoryId;
+        $this->category = $category;
 
         return $this;
     }

@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('api/food', name: 'app_api_food_')]
+#[Route('api/restaurant/food', name: 'app_api_restaurant_food_')]
 class FoodController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $manager, private FoodRepository $repository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator)
@@ -26,7 +26,7 @@ class FoodController extends AbstractController
     #[Route(methods: 'POST')]
     #[OA\Tag(name: "CRUD Food")]
     #[OA\Post(
-        path: "/api/food",
+        path: "/api/restaurant/food",
         summary: "Créer un plat",
         requestBody: new OA\RequestBody(
             required: true,
@@ -36,7 +36,7 @@ class FoodController extends AbstractController
                 properties: [
                     new OA\Property(property: "title", type: "string", example: "Nom du plat"),
                     new OA\Property(property: "description", type: "string", example: "Description du plat"),
-                    new OA\Property(property: "price", type: "integer", example: 10),
+                    new OA\Property(property: "price", type: "float", example: 10.99),
                     new OA\Property(property: "createdAt", type: "string", format: "date-time"),
 
                 ]
@@ -51,7 +51,7 @@ class FoodController extends AbstractController
                     new OA\Property(property: "id", type: "integer", example: 1),
                     new OA\Property(property: "title", type: "string", example: "Nom du plat"),
                     new OA\Property(property: "description", type: "string", example: "Description du plat"),
-                    new OA\Property(property: "price", type: "integer", example: 10),
+                    new OA\Property(property: "price", type: "integer", example: 10.99),
                     new OA\Property(property: "createdAt", type: "string", format: "date-time"),
                 ]
             )
@@ -66,7 +66,7 @@ class FoodController extends AbstractController
         $this->manager->flush();
 
         $responseData = $this->serializer->serialize($food, 'json');
-        $location = $this->urlGenerator->generate('app_api_food_show', ['id' => $food->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $location = $this->urlGenerator->generate('app_api_restaurant_food_show', ['id' => $food->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
 
         return new JsonResponse($responseData, Response::HTTP_CREATED, ['Location' => $location], true);
     }
@@ -74,7 +74,7 @@ class FoodController extends AbstractController
     #[Route('/{id}', name: 'show', methods: 'GET')]
     #[OA\Tag(name: "CRUD Food")]
     #[OA\Get(
-        path: "/api/food/{id}",
+        path: "/api/restaurant/food/{id}",
         summary: "Afficher un plat",
         parameters: [new OA\Parameter(
             name: "id",
@@ -92,7 +92,7 @@ class FoodController extends AbstractController
                     new OA\Property(property: "id", type: "integer", example: 1),
                     new OA\Property(property: "title", type: "string", example: "Nom du plat"),
                     new OA\Property(property: "description", type: "string", example: "Description du plat"),
-                    new OA\Property(property: "price", type: "integer", example: 10),
+                    new OA\Property(property: "price", type: "integer", example: 10.99),
                     new OA\Property(property: "createdAt", type: "string", format: "date-time"),
                     new OA\Property(property: "updatedAt", type: "string", format: "date-time"),
                 ]
@@ -114,7 +114,7 @@ class FoodController extends AbstractController
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
     #[OA\Tag(name: "CRUD Food")]
     #[OA\Put(
-        path: "/api/food/{id}",
+        path: "/api/restaurant/food/{id}",
         summary: "Modifier un plat",
         parameters: [new OA\Parameter(
             name: "id",
@@ -132,7 +132,7 @@ class FoodController extends AbstractController
                     new OA\Property(property: "id", type: "integer", example: 1),
                     new OA\Property(property: "title", type: "string", example: "Nom du plat"),
                     new OA\Property(property: "description", type: "string", example: "Description du plat"),
-                    new OA\Property(property: "price", type: "integer", example: 10),
+                    new OA\Property(property: "price", type: "integer", example: 10.99),
                     new OA\Property(property: "updatedAt", type: "string", format: "date-time"),
                 ]
             )
@@ -167,7 +167,7 @@ class FoodController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
     #[OA\Tag(name: "CRUD Food")]
     #[OA\Delete(
-        path: "/api/food/{id}",
+        path: "/api/restaurant/food/{id}",
         summary: "Supprimer un plat",
         parameters: [new OA\Parameter(
             name: "id",

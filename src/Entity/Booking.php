@@ -32,9 +32,13 @@ class Booking
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'bookings')]
+    #[ORM\ManyToOne(inversedBy: 'bookings', targetEntity: Restaurant::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Restaurant $restaurant = null;
+
+    #[ORM\ManyToOne(inversedBy: 'bookings', targetEntity: User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $client = null;
 
     public function getId(): ?int
     {
@@ -121,6 +125,18 @@ class Booking
     public function setRestaurant(?restaurant $restaurant): static
     {
         $this->restaurant = $restaurant;
+
+        return $this;
+    }
+
+    public function getClient(): ?User
+    {
+        return $this->client;
+    }
+
+    public function setClient(?User $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }

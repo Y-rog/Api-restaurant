@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('api/category', name: 'app_api_category_')]
+#[Route('api/restaurant/category', name: 'app_api_restaurant_category_')]
 class CategoryController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $manager, private CategoryRepository $repository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator)
@@ -26,7 +26,7 @@ class CategoryController extends AbstractController
     #[Route(methods: 'POST')]
     #[OA\Tag(name: "CRUD Category")]
     #[OA\Post(
-        path: "/api/category",
+        path: "/api/restaurant/category",
         summary: "Créer une catégorie",
         requestBody: new OA\RequestBody(
             required: true,
@@ -61,7 +61,7 @@ class CategoryController extends AbstractController
         $this->manager->flush();
 
         $responseData = $this->serializer->serialize($category, 'json');
-        $location = $this->urlGenerator->generate('app_api_category_show', ['id' => $category->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $location = $this->urlGenerator->generate('app_api_restaurant_category_show', ['id' => $category->getId()]);
 
         return new JsonResponse($responseData, Response::HTTP_CREATED, ['Location' => $location], true);
     }
@@ -69,7 +69,7 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'show', methods: 'GET')]
     #[OA\Tag(name: "CRUD Category")]
     #[OA\Get(
-        path: "/api/category/{id}",
+        path: "/api/restaurant/category/{id}",
         summary: "Afficher une catégorie",
         parameters: [new OA\Parameter(
             name: "id",
@@ -112,7 +112,7 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
     #[OA\Tag(name: "CRUD Category")]
     #[OA\Put(
-        path: "/api/category/{id}",
+        path: "/api/restaurant/category/{id}",
         summary: "Modifier une catégorie",
         parameters: [new OA\Parameter(
             name: "id",
@@ -162,7 +162,7 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
     #[OA\Tag(name: "CRUD Category")]
     #[OA\Delete(
-        path: "/api/category/{id}",
+        path: "/api/restaurant/category/{id}",
         summary: "Supprimer une catégorie",
         parameters: [new OA\Parameter(
             name: "id",

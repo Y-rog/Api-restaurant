@@ -22,7 +22,7 @@ class Food
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
+    #[ORM\Column(type: Types::FLOAT)]
     private ?int $price = null;
 
     #[ORM\Column]
@@ -34,7 +34,7 @@ class Food
     /**
      * @var Collection<int, FoodCategory>
      */
-    #[ORM\OneToMany(targetEntity: FoodCategory::class, mappedBy: 'foodId', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: FoodCategory::class, mappedBy: 'food', orphanRemoval: true)]
     private Collection $foodCategories;
 
     public function __construct()
@@ -71,7 +71,7 @@ class Food
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
@@ -119,7 +119,7 @@ class Food
     {
         if (!$this->foodCategories->contains($foodCategory)) {
             $this->foodCategories->add($foodCategory);
-            $foodCategory->setFoodId($this);
+            $foodCategory->setFood($this);
         }
 
         return $this;
@@ -129,8 +129,8 @@ class Food
     {
         if ($this->foodCategories->removeElement($foodCategory)) {
             // set the owning side to null (unless already changed)
-            if ($foodCategory->getFoodId() === $this) {
-                $foodCategory->setFoodId(null);
+            if ($foodCategory->getFood() === $this) {
+                $foodCategory->setFood(null);
             }
         }
 

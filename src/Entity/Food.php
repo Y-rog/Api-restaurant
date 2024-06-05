@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\FoodRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\FoodRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: FoodRepository::class)]
 class Food
@@ -14,20 +15,26 @@ class Food
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['food'])]
     private ?int $id = null;
 
+    #[Groups(['food'])]
     #[ORM\Column(length: 64)]
     private ?string $title = null;
 
+    #[Groups(['food'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Groups(['food'])]
     #[ORM\Column(type: Types::FLOAT)]
     private ?int $price = null;
 
+    #[Groups(['food'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Groups(['food'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 

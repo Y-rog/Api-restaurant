@@ -236,4 +236,37 @@ class BookingController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('s', name: 'list', methods: 'GET')]
+    #[OA\Tag(name: "CRUD Booking")]
+    #[OA\Get(
+        path: "/api/restaurant/{id}/bookings",
+        summary: "Afficher toutes les réservations",
+        parameters: [new OA\Parameter(
+            name: "id",
+            in: "path",
+            required: true,
+            description: "L'identifiant du restaurant",
+            schema: new OA\Schema(type: "integer", example: 1)
+        )],
+        responses: [new OA\Response(
+            response: "200",
+            description: "Réservations affichées avec succès",
+        ), new OA\Response(
+            response: "404",
+            description: "Aucune réservation trouvée"
+        )]
+    )]
+    public function list(int $id): JsonResponse
+    {
+        $bookings = $this->repository->findBy(['restaurant' => $id]);
+
+        if ($bookings) {
+            $responseData = $this->serializer->serialize($bookings, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['restaurant', 'client']]);
+
+            return new JsonResponse($responseData);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+    }
 }

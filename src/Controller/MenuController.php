@@ -2,12 +2,13 @@
 
 namespace App\Controller;
 
-use DateTimeImmutable;
 use App\Entity\Menu;
+use DateTimeImmutable;
 use OpenApi\Attributes as OA;
 use App\Repository\MenuRepository;
 use App\Repository\RestaurantRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\MenuCategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -20,7 +21,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('api/restaurant/{id}/menu', name: 'app_api_restaurant_menu_')]
 class MenuController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $manager, private MenuRepository $repository, private RestaurantRepository $restaurantRepository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator)
+    public function __construct(private EntityManagerInterface $manager, private MenuRepository $repository, private RestaurantRepository $restaurantRepository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator, private MenuCategoryRepository $menuCategoryRepository)
     {
     }
 
@@ -28,7 +29,7 @@ class MenuController extends AbstractController
     #[OA\Tag(name: "CRUD Menu")]
     #[OA\Post(
         path: "/api/restaurant/{id}/menu",
-        summary: "Créer une menu",
+        summary: "Créer un menu",
         parameters: [new OA\Parameter(
             name: "id",
             in: "path",
@@ -221,6 +222,38 @@ class MenuController extends AbstractController
             $this->manager->flush();
 
             return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+    }
+
+    #[Route('s', name: 'list', methods: 'GET')]
+    #[OA\Tag(name: "CRUD Menu")]
+    #[OA\Get(
+        path: "/api/restaurant/{id}/menus",
+        summary: "Afficher les menus d'un restaurant",
+        parameters: [new OA\Parameter(
+            name: "id",
+            in: "path",
+            required: true,
+            description: "L'identifiant du restaurant",
+            schema: new OA\Schema(type: "integer", example: 1)
+        )],
+        responses: [new OA\Response(
+            response: "200",
+            description: "Menus trouvés",
+        ), new OA\Response(
+            response: "404",
+            description: "Menus non trouvés"
+        )]
+    )]
+    public function list(int $id): JsonResponse
+    {
+        $menus = $this->repository->findBy(['restaurant' => $id]);
+
+        if ($menus) {
+            $responseData = $this->serializer->serialize($menus, 'json', ['groups' => 'menu']);
+            return new JsonResponse($responseData);
         }
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);

@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Food;
 use DateTimeImmutable;
-use OpenApi\Attributes as OA;
 use App\Entity\Category;
+use App\Entity\FoodCategory;
+use OpenApi\Attributes as OA;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -190,6 +192,34 @@ class CategoryController extends AbstractController
             $this->manager->flush();
 
             return new JsonResponse(null, Response::HTTP_NO_CONTENT);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+    }
+
+    #[Route('-list', name: 'list', methods: 'GET')]
+    #[OA\Tag(name: "CRUD Category")]
+    #[OA\Get(
+        path: "/api/restaurant/category-list",
+        summary: "Afficher les catégories",
+        responses: [
+            new OA\Response(
+                response: "200",
+                description: "Catégories trouvées avec succès",
+            ),
+            new OA\Response(
+                response: "404",
+                description: "Aucune catégorie trouvée"
+            )
+        ]
+    )]
+    public function list(): JsonResponse
+    {
+        $categories = $this->repository->findAll();
+        if ($categories) {
+            $responseData = $this->serializer->serialize($categories, 'json', ['groups' => 'category']);
+
+            return new JsonResponse($responseData);
         }
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);

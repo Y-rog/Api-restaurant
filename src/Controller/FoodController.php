@@ -199,4 +199,28 @@ class FoodController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('s', name: 'list', methods: 'GET')]
+    #[OA\Tag(name: "CRUD Food")]
+    #[OA\Get(
+        path: "/api/restaurant/foods",
+        summary: "Afficher les plats",
+        responses: [
+            new OA\Response(
+                response: "200",
+                description: "Liste des plats trouvée avec succès",
+            ),
+            new OA\Response(
+                response: "404",
+                description: "Aucun plat trouvé"
+            )
+        ]
+    )]
+    public function list(): JsonResponse
+    {
+        $foods = $this->repository->findAll();
+        $responseData = $this->serializer->serialize($foods, 'json', ['groups' => 'food']);
+
+        return new JsonResponse($responseData, Response::HTTP_OK, [], true);
+    }
 }

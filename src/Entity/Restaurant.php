@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\RestaurantRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\RestaurantRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: RestaurantRepository::class)]
 class Restaurant
@@ -14,27 +15,35 @@ class Restaurant
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['restaurant'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 32)]
+    #[Groups(['restaurant'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['restaurant'])]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Groups(['restaurant'])]
     private array $amOpeningTime = [];
 
     #[ORM\Column]
+    #[Groups(['restaurant'])]
     private array $pmOpeningTime = [];
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['restaurant'])]
     private ?int $maxGuest = null;
 
     #[ORM\Column]
+    #[Groups(['restaurant'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['restaurant'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**

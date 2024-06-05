@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\MenuRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MenuRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: MenuRepository::class)]
 class Menu
@@ -14,32 +15,36 @@ class Menu
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['menu'])]
     private ?int $id = null;
 
+    #[Groups(['menu'])]
     #[ORM\Column(length: 64)]
     private ?string $title = null;
 
+    #[Groups(['menu'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
+    #[Groups(['menu'])]
     #[ORM\Column(type: Types::FLOAT)]
     private ?int $price = null;
 
+    #[Groups(['menu'])]
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[Groups(['menu'])]
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'menus')]
+    #[ORM\ManyToOne(inversedBy: 'menus', targetEntity: Restaurant::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Restaurant $restaurant = null;
 
-    /**
-     * @var Collection<int, MenuCategory>
-     */
-    #[ORM\OneToMany(targetEntity: MenuCategory::class, mappedBy: 'menuId', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: MenuCategory::class, mappedBy: 'menu', orphanRemoval: true)]
     private Collection $menuCategories;
+
 
     public function __construct()
     {
@@ -123,9 +128,6 @@ class Menu
         return $this;
     }
 
-    /**
-     * @return Collection<int, MenuCategory>
-     */
     public function getMenuCategories(): Collection
     {
         return $this->menuCategories;

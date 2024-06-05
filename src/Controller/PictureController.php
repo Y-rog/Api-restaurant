@@ -221,4 +221,37 @@ class PictureController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('s', name: 'list', methods: 'GET')]
+    #[OA\Tag(name: "CRUD Picture")]
+    #[OA\Get(
+        path: "/api/restaurant/{id}/pictures",
+        summary: "Afficher les images d'un restaurant",
+        parameters: [new OA\Parameter(
+            name: "id",
+            in: "path",
+            required: true,
+            description: "L'identifiant du restaurant",
+            schema: new OA\Schema(type: "integer", example: 1)
+        )],
+        responses: [new OA\Response(
+            response: "200",
+            description: "Images trouvées",
+        ), new OA\Response(
+            response: "404",
+            description: "Aucune image trouvée"
+        )]
+    )]
+    public function list(int $id): JsonResponse
+    {
+        $pictures = $this->repository->findBy(['restaurant' => $id]);
+
+        if ($pictures) {
+            $responseData = $this->serializer->serialize($pictures, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['restaurant']]);
+
+            return new JsonResponse($responseData);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+    }
 }

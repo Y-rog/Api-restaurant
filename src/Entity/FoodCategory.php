@@ -13,11 +13,11 @@ class FoodCategory
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'foodCategories')]
+    #[ORM\ManyToOne(inversedBy: 'foodCategories', targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'foodCategories')]
+    #[ORM\ManyToOne(inversedBy: 'foodCategories', targetEntity: Food::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Food $food = null;
 

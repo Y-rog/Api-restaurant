@@ -217,4 +217,31 @@ class RestaurantController extends AbstractController
 
         return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
+
+    #[Route('s', name: 'list', methods: 'GET')]
+    #[OA\Tag(name: "CRUD Restaurant")]
+    #[OA\Get(
+        path: "/api/restaurants",
+        summary: "Afficher les restaurants",
+        responses: [
+            new OA\Response(
+                response: "200",
+                description: "Liste des restaurants trouvée",
+            ),
+            new OA\Response(
+                response: "404",
+                description: "Aucun restaurant trouvé"
+            )
+        ]
+    )]
+    public function list(): JsonResponse
+    {
+        $restaurants = $this->repository->findAll();
+        if ($restaurants) {
+            $responseData = $this->serializer->serialize($restaurants, 'json', ['groups' => 'restaurant']);
+            return new JsonResponse($responseData);
+        }
+
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
+    }
 }

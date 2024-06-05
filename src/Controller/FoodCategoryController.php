@@ -3,12 +3,12 @@
 namespace App\Controller;
 
 
-use App\Entity\MenuCategory;
+use App\Entity\FoodCategory;
 use OpenApi\Attributes as OA;
-use App\Repository\MenuRepository;
+use App\Repository\FoodRepository;
 use App\Repository\CategoryRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Repository\MenuCategoryRepository;
+use App\Repository\FoodCategoryRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -18,24 +18,24 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-#[Route('api/restaurant/menu/category', name: 'app_api_restaurant_menu_category_')]
-#[OA\Tag(name: "CRUD Menu Category")]
-class MenuCategoryController extends AbstractController
+#[Route('api/restaurant/food/category', name: 'app_api_restaurant_food_category_')]
+#[OA\Tag(name: "CRUD Food Category")]
+class FoodCategoryController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $manager, private MenuCategoryRepository $repository,  private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator, private MenuRepository $menuRepository, private CategoryRepository $categoryRepository)
+    public function __construct(private EntityManagerInterface $manager, private FoodCategoryRepository $repository,  private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator, private FoodRepository $foodRepository, private CategoryRepository $categoryRepository)
     {
     }
     #[Route(methods: 'POST')]
     #[OA\Post(
-        path: "/api/restaurant/menu/category",
-        summary: "Créer une association entre un menu et une catégorie",
+        path: "/api/restaurant/food/category",
+        summary: "Créer une association entre un plat et une catégorie",
         requestBody: new OA\RequestBody(
             required: true,
             description: "Les données de l'association à créer",
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
-                    new OA\Property(property: "menu", type: "integer", example: 1),
+                    new OA\Property(property: "food", type: "integer", example: 1),
                     new OA\Property(property: "category", type: "integer", example: 1),
                 ]
             )
@@ -47,7 +47,7 @@ class MenuCategoryController extends AbstractController
                 type: "object",
                 properties: [
                     new OA\Property(property: "id", type: "integer", example: 1),
-                    new OA\Property(property: "menu", type: "integer", example: 1),
+                    new OA\Property(property: "food", type: "integer", example: 1),
                     new OA\Property(property: "category", type: "integer", example: 1),
                 ]
             )
@@ -55,26 +55,30 @@ class MenuCategoryController extends AbstractController
     )]
     public function new(Request $request): JsonResponse
     {
-        $menu = $this->menuRepository->find($request->toArray()['menu']);
+        $food = $this->foodRepository->find($request->toArray()['food']);
         $category = $this->categoryRepository->find($request->toArray()['category']);
 
-        $menuCategory = $this->serializer->deserialize($request->getContent(), MenuCategory::class, 'json');
+        if (!$food || !$category) {
+            return new JsonResponse('Food or Category not found', Response::HTTP_NOT_FOUND);
+        }
 
-        $menuCategory->setMenu($menu);
-        $menuCategory->setCategory($category);
+        $foodCategory = $this->serializer->deserialize($request->getContent(), FoodCategory::class, 'json');
 
-        $this->manager->persist($menuCategory);
+        $foodCategory->setFood($food);
+        $foodCategory->setCategory($category);
+
+        $this->manager->persist($foodCategory);
         $this->manager->flush();
 
-        $responseData = $this->serializer->serialize($menuCategory, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['menu', 'category']]);
-        $location = $this->urlGenerator->generate('app_api_restaurant_menu_category_read', ['id' => $menuCategory->getId()]);
+        $responseData = $this->serializer->serialize($foodCategory, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['food', 'category']]);
+        $location = $this->urlGenerator->generate('app_api_restaurant_food_category_read', ['id' => $foodCategory->getId()]);
         return new JsonResponse($responseData, Response::HTTP_CREATED, ['Location' => $location], true);
     }
 
     #[Route('/{id}', name: 'read', methods: 'GET')]
     #[OA\Get(
-        path: "/api/restaurant/menu/category/{id}",
-        summary: "Afficher une association entre un menu et une catégorie",
+        path: "/api/restaurant/food/category/{id}",
+        summary: "Afficher une association entre un plat et une catégorie",
         parameters: [new OA\Parameter(
             name: "id",
             in: "path",
@@ -89,28 +93,28 @@ class MenuCategoryController extends AbstractController
                 type: "object",
                 properties: [
                     new OA\Property(property: "id", type: "integer", example: 1),
-                    new OA\Property(property: "menu", type: "integer", example: 1),
+                    new OA\Property(property: "food", type: "integer", example: 1),
                     new OA\Property(property: "category", type: "integer", example: 1),
                 ]
             )
         )]
     )]
-    public function read(MenuCategory $menuCategory): JsonResponse
+    public function read(FoodCategory $foodCategory): JsonResponse
     {
-        $menuCategory = $this->repository->find($menuCategory);
+        $foodCategory = $this->repository->find($foodCategory);
 
-        if ($menuCategory) {
-            $responseData = $this->serializer->serialize($menuCategory, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['menu', 'category']]);
+        if ($foodCategory) {
+            $responseData = $this->serializer->serialize($foodCategory, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['food', 'category']]);
             return new JsonResponse($responseData);
         }
 
-        return new JsonResponse('Menu Category not found', Response::HTTP_NOT_FOUND);
+        return new JsonResponse('Food Category not found', Response::HTTP_NOT_FOUND);
     }
 
     #[Route('/{id}', name: 'update', methods: 'PUT')]
     #[OA\Put(
-        path: "/api/restaurant/menu/category/{id}",
-        summary: "Modifier une association entre un menu et une catégorie",
+        path: "/api/restaurant/food/category/{id}",
+        summary: "Modifier une association entre un plat et une catégorie",
         parameters: [new OA\Parameter(
             name: "id",
             in: "path",
@@ -124,7 +128,7 @@ class MenuCategoryController extends AbstractController
             content: new OA\JsonContent(
                 type: "object",
                 properties: [
-                    new OA\Property(property: "menu", type: "integer", example: 1),
+                    new OA\Property(property: "food", type: "integer", example: 1),
                     new OA\Property(property: "category", type: "integer", example: 1),
                 ]
             )
@@ -136,30 +140,30 @@ class MenuCategoryController extends AbstractController
                 type: "object",
                 properties: [
                     new OA\Property(property: "id", type: "integer", example: 1),
-                    new OA\Property(property: "menu", type: "integer", example: 1),
+                    new OA\Property(property: "food", type: "integer", example: 1),
                     new OA\Property(property: "category", type: "integer", example: 1),
                 ]
             )
         )]
     )]
-    public function update(Request $request, MenuCategory $menuCategory): JsonResponse
+    public function update(Request $request, FoodCategory $foodCategory): JsonResponse
     {
-        $menu = $this->menuRepository->find($request->toArray()['menu']);
+        $food = $this->foodRepository->find($request->toArray()['food']);
         $category = $this->categoryRepository->find($request->toArray()['category']);
 
-        $menuCategory->setMenu($menu);
-        $menuCategory->setCategory($category);
+        $foodCategory->setFood($food);
+        $foodCategory->setCategory($category);
 
         $this->manager->flush();
 
-        $responseData = $this->serializer->serialize($menuCategory, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['menu', 'category']]);
+        $responseData = $this->serializer->serialize($foodCategory, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['food', 'category']]);
         return new JsonResponse($responseData);
     }
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
     #[OA\Delete(
-        path: "/api/restaurant/menu/category/{id}",
-        summary: "Supprimer une association entre un menu et une catégorie",
+        path: "/api/restaurant/food/category/{id}",
+        summary: "Supprimer une association entre un plat et une catégorie",
         parameters: [new OA\Parameter(
             name: "id",
             in: "path",
@@ -172,9 +176,9 @@ class MenuCategoryController extends AbstractController
             description: "Association supprimée avec succès"
         )]
     )]
-    public function delete(MenuCategory $menuCategory): JsonResponse
+    public function delete(FoodCategory $foodCategory): JsonResponse
     {
-        $this->manager->remove($menuCategory);
+        $this->manager->remove($foodCategory);
         $this->manager->flush();
 
         return new JsonResponse(null, Response::HTTP_NO_CONTENT);
@@ -182,28 +186,28 @@ class MenuCategoryController extends AbstractController
 
     #[Route('-list', name: 'list', methods: 'GET')]
     #[OA\Get(
-        path: "/api/restaurant/menu/category-list",
-        summary: "Liste des associations entre un menu et une catégorie",
+        path: "/api/restaurant/food/category-list",
+        summary: "Afficher les plats d'une catégorie",
         responses: [
             new OA\Response(
                 response: "200",
-                description: "Liste des associations trouvée",
+                description: "Associations trouvées",
             ),
             new OA\Response(
                 response: "404",
-                description: "Aucune association trouvée"
+                description: "Associations non trouvées"
             )
         ]
     )]
     public function list(): JsonResponse
     {
-        $menuCategories = $this->repository->findAll();
+        $foodCategories = $this->repository->findAll();
 
-        if ($menuCategories) {
-            $responseData = $this->serializer->serialize($menuCategories, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['menu', 'category']]);
+        if ($foodCategories) {
+            $responseData = $this->serializer->serialize($foodCategories, 'json', [AbstractNormalizer::IGNORED_ATTRIBUTES => ['food', 'category']]);
             return new JsonResponse($responseData);
         }
 
-        return new JsonResponse('Menu Categories not found', Response::HTTP_NOT_FOUND);
+        return new JsonResponse(null, Response::HTTP_NOT_FOUND);
     }
 }

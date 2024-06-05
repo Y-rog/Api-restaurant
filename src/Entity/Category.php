@@ -2,10 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\CategoryRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category
@@ -13,15 +14,19 @@ class Category
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['category'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 64)]
+    #[Groups(['category'])]
     private ?string $title = null;
 
     #[ORM\Column]
+    #[Groups(['category'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['category'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     /**
@@ -95,7 +100,7 @@ class Category
     {
         if (!$this->menuCategories->contains($menuCategory)) {
             $this->menuCategories->add($menuCategory);
-            $menuCategory->setCategoryId($this);
+            $menuCategory->setCategory($this);
         }
 
         return $this;
@@ -105,8 +110,8 @@ class Category
     {
         if ($this->menuCategories->removeElement($menuCategory)) {
             // set the owning side to null (unless already changed)
-            if ($menuCategory->getCategoryId() === $this) {
-                $menuCategory->setCategoryId(null);
+            if ($menuCategory->getCategory() === $this) {
+                $menuCategory->setCategory(null);
             }
         }
 
@@ -125,7 +130,7 @@ class Category
     {
         if (!$this->foodCategories->contains($foodCategory)) {
             $this->foodCategories->add($foodCategory);
-            $foodCategory->setCategoryId($this);
+            $foodCategory->setCategory($this);
         }
 
         return $this;
@@ -135,8 +140,8 @@ class Category
     {
         if ($this->foodCategories->removeElement($foodCategory)) {
             // set the owning side to null (unless already changed)
-            if ($foodCategory->getCategoryId() === $this) {
-                $foodCategory->setCategoryId(null);
+            if ($foodCategory->getCategory() === $this) {
+                $foodCategory->setCategory(null);
             }
         }
 

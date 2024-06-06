@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('api/restaurant/category', name: 'app_api_restaurant_category_')]
+#[OA\Tag(name: "CRUD Catégorie")]
 class CategoryController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $manager, private CategoryRepository $repository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator)
@@ -26,7 +27,6 @@ class CategoryController extends AbstractController
     }
 
     #[Route(methods: 'POST')]
-    #[OA\Tag(name: "CRUD Category")]
     #[OA\Post(
         path: "/api/restaurant/category",
         summary: "Créer une catégorie",
@@ -69,7 +69,6 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Category")]
     #[OA\Get(
         path: "/api/restaurant/category/{id}",
         summary: "Afficher une catégorie",
@@ -112,7 +111,6 @@ class CategoryController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
-    #[OA\Tag(name: "CRUD Category")]
     #[OA\Put(
         path: "/api/restaurant/category/{id}",
         summary: "Modifier une catégorie",
@@ -162,7 +160,6 @@ class CategoryController extends AbstractController
 
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
-    #[OA\Tag(name: "CRUD Category")]
     #[OA\Delete(
         path: "/api/restaurant/category/{id}",
         summary: "Supprimer une catégorie",
@@ -198,7 +195,6 @@ class CategoryController extends AbstractController
     }
 
     #[Route('-list', name: 'list', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Category")]
     #[OA\Get(
         path: "/api/restaurant/category-list",
         summary: "Afficher les catégories",

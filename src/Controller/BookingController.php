@@ -18,6 +18,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('api/restaurant/{id}/booking', name: 'app_api_restaurant_booking_')]
+#[OA\Tag(name: "CRUD Réservation")]
 class BookingController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $manager, private BookingRepository $repository, private RestaurantRepository $restaurantRepository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator)
@@ -25,7 +26,6 @@ class BookingController extends AbstractController
     }
 
     #[Route(methods: 'POST')]
-    #[OA\Tag(name: "CRUD Booking")]
     #[OA\Post(
         path: "/api/restaurant/{id}/booking",
         summary: "Créer une réservation",
@@ -93,7 +93,6 @@ class BookingController extends AbstractController
     }
 
     #[Route('/{bookingId}', name: 'show', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Booking")]
     #[OA\Get(
         path: "/api/restaurant/{id}/booking/{bookingId}",
         summary: "Afficher une réservation",
@@ -142,7 +141,6 @@ class BookingController extends AbstractController
     }
 
     #[Route('/{bookingId}', name: 'edit', methods: 'PUT')]
-    #[OA\Tag(name: "CRUD Booking")]
     #[OA\Put(
         path: "/api/restaurant/{id}/booking/{bookingId}",
         summary: "Modifier une réservation",
@@ -201,7 +199,6 @@ class BookingController extends AbstractController
     }
 
     #[Route('/{bookingId}', name: 'delete', methods: 'DELETE')]
-    #[OA\Tag(name: "CRUD Booking")]
     #[OA\Delete(
         path: "/api/restaurant/{id}/booking/{bookingId}",
         summary: "Supprimer une réservation",
@@ -238,7 +235,6 @@ class BookingController extends AbstractController
     }
 
     #[Route('s', name: 'list', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Booking")]
     #[OA\Get(
         path: "/api/restaurant/{id}/bookings",
         summary: "Afficher toutes les réservations",

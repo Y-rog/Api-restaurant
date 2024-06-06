@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('api/restaurant/food', name: 'app_api_restaurant_food_')]
+#[OA\Tag(name: "CRUD Plat")]
 class FoodController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $manager, private FoodRepository $repository, private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator)
@@ -24,7 +25,6 @@ class FoodController extends AbstractController
     }
 
     #[Route(methods: 'POST')]
-    #[OA\Tag(name: "CRUD Food")]
     #[OA\Post(
         path: "/api/restaurant/food",
         summary: "Créer un plat",
@@ -72,7 +72,6 @@ class FoodController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Food")]
     #[OA\Get(
         path: "/api/restaurant/food/{id}",
         summary: "Afficher un plat",
@@ -112,7 +111,6 @@ class FoodController extends AbstractController
     }
 
     #[Route('/{id}', name: 'edit', methods: 'PUT')]
-    #[OA\Tag(name: "CRUD Food")]
     #[OA\Put(
         path: "/api/restaurant/food/{id}",
         summary: "Modifier un plat",
@@ -165,7 +163,6 @@ class FoodController extends AbstractController
 
 
     #[Route('/{id}', name: 'delete', methods: 'DELETE')]
-    #[OA\Tag(name: "CRUD Food")]
     #[OA\Delete(
         path: "/api/restaurant/food/{id}",
         summary: "Supprimer un plat",
@@ -201,7 +198,6 @@ class FoodController extends AbstractController
     }
 
     #[Route('s', name: 'list', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Food")]
     #[OA\Get(
         path: "/api/restaurant/foods",
         summary: "Afficher les plats",

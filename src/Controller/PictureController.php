@@ -25,7 +25,7 @@ class PictureController extends AbstractController
     }
 
     #[Route(methods: 'POST')]
-    #[OA\Tag(name: "CRUD Picture")]
+    #[OA\Tag(name: "CRUD Image")]
     #[OA\Post(
         path: "/api/restaurant/{id}/picture",
         summary: "Créer une image",
@@ -85,7 +85,7 @@ class PictureController extends AbstractController
     }
 
     #[Route('/{pictureId}', name: 'show', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Picture")]
+    #[OA\Tag(name: "CRUD Image")]
     #[OA\Get(
         path: "/api/restaurant/{id}/picture/{pictureId}",
         summary: "Afficher une image",
@@ -131,7 +131,7 @@ class PictureController extends AbstractController
     }
 
     #[Route('/{pictureId}', name: 'edit', methods: 'PUT')]
-    #[OA\Tag(name: "CRUD Picture")]
+    #[OA\Tag(name: "CRUD Image")]
     #[OA\Put(
         path: "/api/restaurant/{id}/picture/{pictureId}",
         summary: "Modifier une image",
@@ -186,7 +186,7 @@ class PictureController extends AbstractController
     }
 
     #[Route('/{pictureId}', name: 'delete', methods: 'DELETE')]
-    #[OA\Tag(name: "CRUD Picture")]
+    #[OA\Tag(name: "CRUD Image")]
     #[OA\Delete(
         path: "/api/restaurant/{id}/picture/{pictureId}",
         summary: "Supprimer une image",
@@ -223,7 +223,7 @@ class PictureController extends AbstractController
     }
 
     #[Route('s', name: 'list', methods: 'GET')]
-    #[OA\Tag(name: "CRUD Picture")]
+    #[OA\Tag(name: "CRUD Image")]
     #[OA\Get(
         path: "/api/restaurant/{id}/pictures",
         summary: "Afficher les images d'un restaurant",

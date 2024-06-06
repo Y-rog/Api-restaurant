@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 #[Route('api/restaurant/food/category', name: 'app_api_restaurant_food_category_')]
-#[OA\Tag(name: "CRUD Food Category")]
+#[OA\Tag(name: "CRUD Catégorie de plat")]
 class FoodCategoryController extends AbstractController
 {
     public function __construct(private EntityManagerInterface $manager, private FoodCategoryRepository $repository,  private SerializerInterface $serializer, private UrlGeneratorInterface $urlGenerator, private FoodRepository $foodRepository, private CategoryRepository $categoryRepository)

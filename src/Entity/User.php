@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
@@ -17,42 +18,53 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(['user'])]
     private ?string $email = null;
 
     /**
      * @var list<string> The user roles
      */
     #[ORM\Column]
+    #[Groups(['user'])]
     private array $roles = [];
 
     /**
      * @var string The hashed password
      */
     #[ORM\Column]
+    #[Groups(['user'])]
     private ?string $password = null;
 
     #[ORM\Column]
+    #[Groups(['user'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(nullable: true)]
+    #[Groups(['user'])]
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(length: 32)]
+    #[Groups(['user'])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 32)]
+    #[Groups(['user'])]
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
+    #[Groups(['user'])]
     private ?int $guestNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['user'])]
     private ?string $allergy = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['user'])]
     private ?string $apiToken = null;
 
     /**

@@ -6,22 +6,20 @@ use App\Entity\Picture;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PictureFixtures extends Fixture implements DependentFixtureInterface
 {
+
+    public const PICTURE_NB_TUPLES = 20;
+
     /**
      * @throws \Exception
      */
 
-    public function __construct(private UserPasswordHasherInterface $passwordHasher)
-    {
-    }
-
     public function load(ObjectManager $manager): void
     {
 
-        for ($i = 1; $i <= 20; ++$i) {
+        for ($i = 1; $i <= self::PICTURE_NB_TUPLES; ++$i) {
             $picture = (new Picture())
                 ->setTitle('Picture' . $i)
                 ->setSlug('slug-article-title-' . $i)
@@ -39,5 +37,10 @@ class PictureFixtures extends Fixture implements DependentFixtureInterface
         return [
             RestaurantFixtures::class,
         ];
+    }
+
+    public static function getGroups(): array
+    {
+        return ['picture'];
     }
 }
